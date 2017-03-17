@@ -28,8 +28,9 @@ namespace TheWall {
         }
         public void Delete (Message message) {
             using (IDbConnection dbConnection = Connection) {
+                int id = message.MId;
                 dbConnection.Open ();
-                dbConnection.Execute ("DELETE * FROM wall.messages WHERE MId={message.MId}");
+                dbConnection.Execute ("DELETE FROM messages WHERE MId=@Id", new { Id = id });
             }
         }
         public Message FindByMessageId (int id) {

@@ -17,8 +17,8 @@ namespace TheWall {
             }
             [HttpPost]
             [Route ("DeleteComment")]
-        public IActionResult DeleteComment (Comment comment) {
-                commentFactory.Delete (comment);
+        public IActionResult DeleteComment (int id) {
+                commentFactory.Delete (id);
                 return RedirectToAction ("Dashboard", "Dashboard");
             }
             [HttpPost]

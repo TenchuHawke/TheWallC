@@ -26,16 +26,17 @@ namespace TheWall {
         public void Edit (Comment comment) {
             //TODO: create update method;
         }
-        public void Delete (Comment comment) {
+        public void Delete (int id) {
             using (IDbConnection dbConnection = Connection) {
                 dbConnection.Open ();
-                dbConnection.Execute ("DELETE * FROM comments WHERE CId={comment.CId}");
+                dbConnection.Execute ("DELETE FROM comments WHERE CId=@Id", new { Id = id });
+
             }
         }
         public List<Comment> FindAllByMessageID (Message message) {
             using (IDbConnection dbConnection = Connection) {
                 dbConnection.Open ();
-                List<Comment> OutputList = dbConnection.Query<Comment> ("SELECT * FROM comments WHERE MessageId={message.MId}").ToList<Comment> ();
+                List<Comment> OutputList = dbConnection.Query<Comment> ("SELECT * FROM comments WHERE MessageId=@id", new {id = message.MId}).ToList<Comment> ();
                 return OutputList;
             }
         }

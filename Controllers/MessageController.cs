@@ -23,7 +23,7 @@ namespace TheWall {
                 Message message = messageFactory.FindByMessageId (id);
                 List<Comment> clearme = commentFactory.FindAllByMessageID (message);
                 foreach (Comment comment in clearme) {
-                    commentFactory.Delete (comment);
+                    commentFactory.Delete (comment.CId);
                 }
                 messageFactory.Delete (message);
                 return RedirectToAction ("Dashboard", "Dashboard");

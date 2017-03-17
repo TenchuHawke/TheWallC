@@ -20,11 +20,11 @@
             </small> @if(message.UserId == ViewBag.User.UId){
             <div>
                 <td>
-                    <form action="EditMessage" class="borderless">
+                    <form action="EditMessage" class="borderless" method="POST">
                         <input type="hidden" name="id" value="@message.MId">
                         <button type="submit" class="editbutton">Edit message</button>
                     </form>
-                    <form action="DeleteMessage" class="borderless">
+                    <form action="DeleteMessage" class="borderless" method="POST">
                         <input type="hidden" name="id" value="@message.MId">
                         <button type="submit" class="deletebutton"> Delete message</button>
                     </form>
@@ -42,11 +42,11 @@
                 <p>by: <span> @comment.FirstName </span> on @comment.CreatedAt.ToString("MMM dd 'at' h:mm tt")</p>
                 </small> @if(comment.UserId==ViewBag.User.UId){
                 <td>
-                    <form action="EditComment" class="borderless">
+                    <form action="EditComment" class="borderless" method="POST">
                         <input type="hidden" name="id" value="@comment.CId">
                         <button type="submit" class="editbutton">Edit Comment</button>
                     </form>
-                    <form action="DeleteComment" class="borderless">
+                    <form action="DeleteComment" class="borderless" method="POST">
                         <input type="hidden" name="id" value="@comment.CId">
                         <button type="submit" class="deletebutton">Delete Comment</button>
                     </form>
