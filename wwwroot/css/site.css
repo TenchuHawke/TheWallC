@@ -12,10 +12,65 @@
 }
 
 .deletebutton {
-    border: 2px solid blue;
-    background-color: lightblue;
-    font-size: 0.6rem;
+    border: 2px solid darkred;
+    background-color: indianred;
+    color: white;
+    font-size: 1rem;
     height: 40px;
     width: 100px;
     font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    font-stretch: condensed;
+    padding: 0px 5px 0px 5px;
+}
+
+.editbutton {
+    border: 2px solid darkorange;
+    background-color: lightgoldenrodyellow;
+    color: black;
+    font-size: 1rem;
+    height: 40px;
+    width: 100px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    font-stretch: condensed;
+    padding: 0px 5px 0px 5px;
+}
+
+.button-message {
+    border: 2px solid darkgreen;
+    background-color: mediumseagreen;
+    color: white;
+}
+
+.button-comment {
+    border: 2px solid darkblue;
+    background-color: dodgerblue;
+    color: white;
+}
+
+table {
+    background-color: lightsteelblue;
+    width: 80%;
+    border-radius: 12px 12px 12px 12px;
+    -moz-border-radius: 12px 12px 12px 12px;
+    -webkit-border-radius: 12px 12px 12px 12px;
+    border: 6px inset #b0b0b0;
+}
+
+td {
+    padding: 10px;
+    margin-left: 20px;
+}
+
+.borderless {
+    margin: 0px;
+}
+
+small {
+    color: #6c6c6c;
+}
+
+small span {
+    color: #2b374f
 }

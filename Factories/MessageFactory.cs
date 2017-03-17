@@ -41,7 +41,7 @@ namespace TheWall {
         public List<MessageComplete> AllMessagesComplete () {
             using (IDbConnection dbConnection = Connection) {
                 dbConnection.Open ();
-                List<MessageComplete> OutputList = dbConnection.Query<MessageComplete> ("SELECT * FROM messages JOIN users ON messages.UserId = users.UId").ToList ();
+                List<MessageComplete> OutputList = dbConnection.Query<MessageComplete> ("SELECT messages.*, users.FirstName FROM users LEFT JOIN messages on messages.UserId = users.UId").ToList ();
                 return OutputList;
             }
         }

@@ -1,58 +1,73 @@
 @{ ViewData["Title"] = "Home Page"; }
 <h1>Welcome @ViewBag.User.FirstName </h1>
 <table>
+    <tr>
+        <td></td>
+        <td colspan="3">
+            <form action="AddMessage" method="POST">
+                <textarea name="MessageBody" rows="4" cols="30"></textarea>
+                <input type="hidden" name="UserId" value="@ViewBag.User.UId"><br>
+                <button type="submit" class="button-message">Add New Message</button>
+            </form>
+        </td>
+    </tr>
     @{foreach (var message in ViewBag.Messages){
     <tr>
+        <td></td>
         <td colspan="3">@message.MessageBody
-            <p>by: @message.FirstName on @message.UpdatedAt.ToString("MMM dd 'at' hh:mm")</p>
-            @if(message.UserId == ViewBag.User.UId){
+            <small>
+            <p>by: <span> @message.FirstName </span> on @message.UpdatedAt.ToString("MMM dd 'at' h:mm tt")</p>
+            </small> @if(message.UserId == ViewBag.User.UId){
             <div>
-                <br>
-                <form action="DeleteMessage">
-                    <input type="hidden" name="id" value="@message.MId">
-                    <button type="submit" class="deletebutton"> Delete message</button>
-                </form>
+                <td>
+                    <form action="EditMessage" class="borderless">
+                        <input type="hidden" name="id" value="@message.MId">
+                        <button type="submit" class="editbutton">Edit message</button>
+                    </form>
+                    <form action="DeleteMessage" class="borderless">
+                        <input type="hidden" name="id" value="@message.MId">
+                        <button type="submit" class="deletebutton"> Delete message</button>
+                    </form>
+                </td>
             </div>
             }
         </td>
         @foreach (var comment in ViewBag.Comments){ if(comment.MessageId == message.MId){
         <tr>
+            <td></td>
             <td colspan="1"></td>
             <td colspan="2">
                 @comment.CommentBody
-                <p>by: @comment.FirstName on @comment.UpdatedAt.ToString("MMM dd 'at' h:mm ")</p>
-                @if(comment.UserId==ViewBag.User.UId){
-                <p>
-                    <form action="DeleteComment">
+                <small>
+                <p>by: <span> @comment.FirstName </span> on @comment.CreatedAt.ToString("MMM dd 'at' h:mm tt")</p>
+                </small> @if(comment.UserId==ViewBag.User.UId){
+                <td>
+                    <form action="EditComment" class="borderless">
                         <input type="hidden" name="id" value="@comment.CId">
-                        <input type="submit" class="deletebutton" value="Delete this Comment">
+                        <button type="submit" class="editbutton">Edit Comment</button>
                     </form>
-                </p>
+                    <form action="DeleteComment" class="borderless">
+                        <input type="hidden" name="id" value="@comment.CId">
+                        <button type="submit" class="deletebutton">Delete Comment</button>
+                    </form>
+                </td>
                 }
             </td>
         </tr>}}
         <tr>
-            <td colspan="1"></td>
+            <td colspan="2"></td>
             <td colspan="2">
                 <div>
                     <form action="AddComment" method="POST">
                         <textarea name="CommentBody" rows="2" cols="23"></textarea>
                         <input type="hidden" name="UserId" value="@ViewBag.User.UId">
                         <input type="hidden" name="MessageId" value="@message.MId"><br>
-                        <button type="submit">Add New Comment</button>
+                        <button type="submit" class="button-comment">Add New Comment</button>
                     </form>
                 </div>
             </td>
         </tr>
     </tr>
     } }
-    <tr>
-        <td colspan="3">
-            <form action="AddMessage" method="POST">
-                <textarea name="MessageBody" rows="4" cols="30"></textarea>
-                <input type="hidden" name="UserId" value="@ViewBag.User.UId"><br>
-                <button type="submit">Add New Message</button>
-            </form>
-        </td>
-    </tr>
+
 </table>

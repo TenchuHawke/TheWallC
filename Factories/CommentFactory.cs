@@ -42,7 +42,7 @@ namespace TheWall {
         public List<CommentComplete> AllCommentsComplete () {
             using (IDbConnection dbConnection = Connection) {
                 dbConnection.Open ();
-                List<CommentComplete> OutputList = dbConnection.Query<CommentComplete> ("SELECT * FROM comments JOIN users on comments.UserId = users.UId").ToList<CommentComplete>();
+                List<CommentComplete> OutputList = dbConnection.Query<CommentComplete> ("SELECT comments.*, users.FirstName FROM users LEFT JOIN comments on comments.UserId = users.UId").ToList<CommentComplete>();
                 return OutputList;
             }
         }
