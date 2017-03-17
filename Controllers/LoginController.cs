@@ -37,7 +37,8 @@ namespace TheWall {
                     if (Results == null) {
                         userFactory.Add (user as User);
                         Results = userFactory.FindByEmail (user.Email);
-                        HttpContext.Session.SetInt32 ("UserID", (int)Results.UId);
+                        // This isn't working.
+                        HttpContext.Session.SetInt32 ("UserId", Results.UId);
                         return RedirectToAction ("Dashboard", "Dashboard", false);
                     } else {
                         System.Console.WriteLine ("User exists");
@@ -69,7 +70,7 @@ namespace TheWall {
                 User Results = userFactory.FindByEmail (user.Email);
                 if (Results != null) {
                     if (Results.Password == user.Password) {
-                        HttpContext.Session.SetInt32 ("UserID", (int)Results.UId);
+                        HttpContext.Session.SetInt32 ("UserId", Results.UId);
                         return RedirectToAction ("Dashboard", "Dashboard", false);
                     }
                 }

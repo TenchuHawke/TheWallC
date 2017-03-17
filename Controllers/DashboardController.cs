@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TheWall.Factory;
@@ -19,9 +18,7 @@ namespace TheWall {
             [HttpGetAttribute]
             [RouteAttribute ("Dashboard")]
         public IActionResult Dashboard (){
-            // TODO:  Get Session Working!
-            // int UserId = (int)HttpContext.Session.GetInt32("UserId");
-            ViewBag.User = userFactory.FindByID(12);
+            ViewBag.User = userFactory.FindByID((int)HttpContext.Session.GetInt32("UserId"));
             ViewBag.Messages = messageFactory.AllMessagesComplete();
             ViewBag.Comments = commentFactory.AllCommentsComplete();
             return View ();

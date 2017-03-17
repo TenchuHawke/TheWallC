@@ -1,49 +1,50 @@
 @{ ViewData["Title"] = "Home Page"; }
 <h1>Welcome @ViewBag.User.FirstName </h1>
-
 <table>
     @{foreach (var message in ViewBag.Messages){
-
     <tr>
-        <td colspan="2">@message.MessageBody
-            <p>by: @message.FirstName at @message.UpdatedAt</p>
+        <td colspan="3">@message.MessageBody
+            <p>by: @message.FirstName on @message.UpdatedAt.ToString("MMM dd 'at' hh:mm")</p>
+            @if(message.UserId == ViewBag.User.UId){
+            <div>
+                <br>
+                <form action="DeleteMessage">
+                    <input type="hidden" name="id" value="@message.MId">
+                    <button type="submit" class="deletebutton"> Delete message</button>
+                </form>
+            </div>
+            }
         </td>
         @foreach (var comment in ViewBag.Comments){ if(comment.MessageId == message.MId){
         <tr>
             <td colspan="1"></td>
             <td colspan="2">
                 @comment.CommentBody
-                <p>by: @comment.FirstName @comment.UpdatedAt</p>
-                <!--TODO: Fix THis-->
-                <!--if(comment.UserID==ViewBag.User.UId){
+                <p>by: @comment.FirstName on @comment.UpdatedAt.ToString("MMM dd 'at' h:mm ")</p>
+                @if(comment.UserId==ViewBag.User.UId){
                 <p>
                     <form action="DeleteComment">
                         <input type="hidden" name="id" value="@comment.CId">
-                        <input type="submit" value="Delete this Comment">
+                        <input type="submit" class="deletebutton" value="Delete this Comment">
                     </form>
                 </p>
-                }-->
+                }
             </td>
         </tr>}}
         <tr>
             <td colspan="1"></td>
             <td colspan="2">
-                <form action="AddComment" method="POST">
-                    <textarea name="CommentBody" rows="2" cols="23"></textarea>
-                    <input type="hidden" name="UserId" value="@ViewBag.User.UId">
-                    <input type="hidden" name="MessageId" value="@message.MId"><br>
-                    <button type="submit">Add New Comment</button>
-                </form>
+                <div>
+                    <form action="AddComment" method="POST">
+                        <textarea name="CommentBody" rows="2" cols="23"></textarea>
+                        <input type="hidden" name="UserId" value="@ViewBag.User.UId">
+                        <input type="hidden" name="MessageId" value="@message.MId"><br>
+                        <button type="submit">Add New Comment</button>
+                    </form>
+                </div>
             </td>
         </tr>
     </tr>
-    <!--TODO: Fix this:-->
-    <!--if(message.UserID == ViewBag.User.UId){
-    <form action="DeleteMessage">
-        <input type="hidden" name="id" value="@message.MId">
-        <input type="submit" value="Delete this message">Delete this Message
-    </form>
-    }-->
     } }
     <tr>
         <td colspan="3">
