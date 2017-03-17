@@ -1,43 +1,56 @@
-@{ ViewData["Title"] = "Home Page"; }
+@{ ViewData["Title"] = "Login / Registration Page"; }
 <div class="container">
-    <div class="five">
-        <ul>
-            @{ foreach(string error in ViewBag.Errors) {
-            <li>@error </li>
+    <div class="row">
+        <div class="five columns error @(@ViewBag.Errors.Count > 0 ? " framed " : " ")"> @{ foreach(string error in ViewBag.Errors) {
+            <li>
+                <i>@error</i>
+            </li>
             } }
-        </ul>
+            </ul>
+        </div>
     </div>
-    <div class="five">
-        <h5>Existing Users</h5>
-        <h3>Login</h3>
-        <form action="Login" method="POST">
-            <label for="Email">E-Mail Address</label>
-            <input type="email" name="Email">
+    <div class="row">
+        <div class="three columns framed">
+            <p>Existing Users</p>
+            <h5>Login</h5>
+            <form action="Login" method="POST">
+                <label for="Email">E-Mail Address</label>
+                <input type="email" class="u-full-width" name="Email" placeholder="E-Mail">
 
-            <label for="Password">Password</label>
-            <input type="password" name="Password" value="Password1234">
-            <button type="submit">Log in</button>
-        </form>
-    </div>
-    <div class="five">
-        <h5>New Users</h5>
-        <h3>Register</h3>
-        <form action="Register" method="POST">
-            <label for="Email">E-Mail Address</label>
-            <input type="email" name="Email">
+                <label for="Password">Password</label>
+                <input type="password" name="Password" class="u-full-width" placeholder="Password" value="Password1234"><br>
+                <button type="submit" class="button-primary">Log in</button>
+            </form>
+        </div>
+        <div class="nine columns framed">
+            <p>New Users</p>
+            <h5>Register</h5>
+            <div class="row">
 
-            <label for="FirstName">First Name</label>
-            <input type="text" name="FirstName">
+                <div class="six columns">
 
-            <label for="LastName">Last Name</label>
-            <input type="text" name="LastName">
-            <button type="submit">Register</button>
+                    <form action="Register" method="POST">
+                        <label for="Email">E-Mail Address</label>
+                        <input type="email" class="u-full-width" name="Email" placeholder="E-Mail">
 
-            <label for="Password">Password</label>
-            <input type="password" name="Password" value="Password1234">
+                        <label for="FirstName">First Name</label>
+                        <input type="text" class="u-full-width" placeholder="First Name" name="FirstName">
 
-            <label for="PasswordConfirm">Confirm Password</label>
-            <input type="password" name="PasswordConfirm" value="Password1234">
-        </form>
+                        <label for="LastName">Last Name</label>
+                        <input type="text" class="u-full-width" placeholder="Last Name" name="LastName">
+                        <button type="submit" class="button-primary">Register</button>
+
+                </div>
+                <div class="six columns">
+
+                    <label for="Password">Password</label>
+                    <input type="password" name="Password" class="u-full-width" placeholder="Password" value="Password1234">
+
+                    <label for="PasswordConfirm">Confirm Password</label>
+                    <input type="password" name="PasswordConfirm" class="u-full-width" placeholder=" Confirm Password" value="Password1234">
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

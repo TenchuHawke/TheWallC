@@ -1,14 +1,19 @@
 using System.Collections.Generic;
-using System.Linq;
-using DbConnection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-
+using TheWall.Factory;
+using TheWall.Models;
 namespace TheWall {
     public class LoginController : Controller {
-        [HttpGet]
-        [Route ("Login")]
+        private readonly UserFactory userFactory;
+        public LoginController () {
+                //Instantiate a UserFactory object that is immutable (READONLY)
+                //This establishes the initial DB connection for us.
+                userFactory = new UserFactory ();
+            }
+            [HttpGet]
+            [Route ("Login")]
         public IActionResult Login () {
                 List<string> Errors = new List<string> ();
                 try {
@@ -19,44 +24,39 @@ namespace TheWall {
                 } catch {
 
                 }
-
                 ViewBag.Errors = Errors;
                 return View ("loginreg");
             }
             [HttpPost]
             [Route ("Register")]
-        public IActionResult Register (User user) {
-            List<string> Errors = new List<string> ();
-            if (ModelState.IsValid == true) {
-                string Query = $"SELECT * FROM wall.users where email = '" + user.Email.ToLower () + "'";
-                Dictionary<string, object> Results = DbConnector.Query (Query).SingleOrDefault ();
-                if (Results == null) {
-                    Query = $"INSERT INTO `wall`.`users` (`first_name`, `last_name`, `email`, `password`) VALUES ('{user.FirstName}', '{user.LastName}', '" + user.Email.ToLower () + "', '{user.Password}');";
-                    DbConnector.Execute (Query);
-                    Query = $"SELECT * FROM `wall`.`users` WHERE `email` = '{user.Email}'";
-                    Dictionary<string, object> results = DbConnector.Query (Query).SingleOrDefault ();
-                    HttpContext.Session.SetInt32 ("UserID", (int) Results["ID"]);
-                    return RedirectToRoute ("Success");
+        public IActionResult Register (UserValidation user) {
+                List<string> Errors = new List<string> ();
+                if (ModelState.IsValid == true) {
+                    user.Email = user.Email.ToLower ();
+                    User Results = userFactory.FindByEmail (user.Email);
+                    if (Results == null) {
+                        userFactory.Add (user as User);
+                        Results = userFactory.FindByEmail (user.Email);
+                        HttpContext.Session.SetInt32 ("UserID", (int)Results.UId);
+                        return RedirectToAction ("Dashboard", "Dashboard", false);
+                    } else {
+                        System.Console.WriteLine ("User exists");
+                        Errors.Add ("User already exists, try a different E-Mail");
+                    }
                 } else {
-                    System.Console.WriteLine ("User exists");
-                    Errors.Add ("User already exists, try a different E-Mail");
-                }
-            } else {
-                Dictionary<string, string> Error = new Dictionary<string, string> ();
-                System.Console.WriteLine (ViewData.ModelState["Email"].Errors[0].ErrorMessage);
-                foreach (string key in ViewData.ModelState.Keys) {
-                    foreach (ModelError error in ViewData.ModelState[key].Errors) {
-                        Errors.Add (error.ErrorMessage);
+                    Dictionary<string, string> Error = new Dictionary<string, string> ();
+                    foreach (string key in ViewData.ModelState.Keys) {
+                        foreach (ModelError error in ViewData.ModelState[key].Errors) {
+                            Errors.Add (error.ErrorMessage);
+                        }
                     }
                 }
+                HttpContext.Session.SetObjectAsJson ("Errors", Errors);
+                return RedirectToAction ("Login");
             }
-            HttpContext.Session.SetObjectAsJson ("Errors", Errors);
-            return RedirectToAction ("Login");
-        }
-
-        [HttpPost]
-        [Route ("Login")]
-        public IActionResult Login (User user) {
+            [HttpPost]
+            [Route ("Login")]
+        public IActionResult Login (UserValidation user) {
             List<string> Errors = new List<string> ();
             if (user.Email == null) {
                 Errors.Add ("E-Mail can not be blank.");
@@ -65,12 +65,12 @@ namespace TheWall {
                 Errors.Add ("Password can not be blank.");
             }
             if (Errors.Count == 0) {
-                string Query = $"SELECT * FROM wall.users where email = '" + user.Email.ToLower () + "'";
-                Dictionary<string, object> Results = DbConnector.Query (Query).SingleOrDefault ();
+                user.Email = user.Email.ToLower ();
+                User Results = userFactory.FindByEmail (user.Email);
                 if (Results != null) {
-                    if (Results["Password"].ToString () == user.Password) {
-                        HttpContext.Session.SetInt32 ("UserID", (int) Results["ID"]);
-                        return RedirectToRoute ("Success");
+                    if (Results.Password == user.Password) {
+                        HttpContext.Session.SetInt32 ("UserID", (int)Results.UId);
+                        return RedirectToAction ("Dashboard", "Dashboard", false);
                     }
                 }
                 Errors.Add ("Invalid Email / Password Combination.");
